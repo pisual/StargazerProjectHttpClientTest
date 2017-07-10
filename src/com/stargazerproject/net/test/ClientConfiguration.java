@@ -58,6 +58,7 @@ import org.apache.http.util.EntityUtils;
 /**
  * This example demonstrates how to customize and configure the most common aspects
  * of HTTP request execution and connection management.
+ * 这个示例演示了如何定制和配置HTTP请求执行和连接管理的最常见方面。
  */
 public class ClientConfiguration {
     public final static void main(String[] args) throws Exception {
@@ -86,7 +87,7 @@ public class ClientConfiguration {
 
                     @Override
                     protected boolean reject(final CharArrayBuffer line, int count) {
-                        // try to ignore all garbage preceding a status line infinitely
+                        // try to ignore all garbage preceding a status line infinitely 尝试忽略状态行之前的所有垃圾
                         return false;
                     }
 
@@ -188,7 +189,7 @@ public class ClientConfiguration {
             .setConnectionManager(connManager)
             .setDefaultCookieStore(cookieStore)
             .setDefaultCredentialsProvider(credentialsProvider)
-            .setProxy(new HttpHost("myproxy", 8080))
+        //    .setProxy(new HttpHost("myproxy", 8080))
             .setDefaultRequestConfig(defaultRequestConfig)
             .build();
 
@@ -200,7 +201,7 @@ public class ClientConfiguration {
                 .setSocketTimeout(5000)
                 .setConnectTimeout(5000)
                 .setConnectionRequestTimeout(5000)
-                .setProxy(new HttpHost("myotherproxy", 8080))
+             //   .setProxy(new HttpHost("myotherproxy", 8080))
                 .build();
             httpget.setConfig(requestConfig);
 
