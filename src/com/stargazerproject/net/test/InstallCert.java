@@ -28,7 +28,7 @@ public class InstallCert {
 		System.setProperty("javax.net.ssl.trustStore","/Users/Felixerio/SSL/hmog.me.keystore");
         String host = "hmog.me";  
         int port = 443;
-        char[] passphrase = "xxx".toCharArray();  
+        char[] passphrase = "1074adce".toCharArray();  
   
         File file = new File("/Users/Felixerio/SSL/"+ host +".keystore");
         if(file.exists()!=Boolean.TRUE){

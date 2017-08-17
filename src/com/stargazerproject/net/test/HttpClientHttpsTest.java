@@ -9,6 +9,10 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 
@@ -33,9 +37,9 @@ public class HttpClientHttpsTest {
 
 		KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());		
 		FileInputStream instream = new FileInputStream(new File( "/Users/Felixerio/SSL/hmog.me.keystrore"));
-		trustStore.load(instream, "XXXX".toCharArray());
+		trustStore.load(instream, "1074adce".toCharArray());
 
-		SSLContext sslcontext = SSLContexts.custom().loadKeyMaterial(trustStore, "XXXX".toCharArray()).build();
+		SSLContext sslcontext = SSLContexts.custom().loadKeyMaterial(trustStore, "1074adce".toCharArray()).build();
 
 		/*
 		 * 通过忽略证书来进行认证
@@ -73,5 +77,8 @@ public class HttpClientHttpsTest {
 
 	public static void main(String[] args) throws KeyManagementException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 		HttpClientHttpsTest.httpsTest();
+		
+		List test = new ArrayList();
+		Map test2 = new HashMap();
 	}
 }
