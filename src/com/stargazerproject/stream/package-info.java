@@ -5,4 +5,4 @@
  * @author Felixerio
  *
  */
-package com.stargazerproject.cache;
+package com.stargazerproject.stream;

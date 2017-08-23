@@ -3,6 +3,7 @@
         <wb-resource deploy-path="/" source-path="/target/m2e-jee/web-resources"/>
         <wb-resource deploy-path="/" source-path="/WebRoot" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/Test"/>
         <property name="context-root" value="StargazerProjectHttpClientTest"/>
         <property name="java-output-path" value="/StargazerProjectHttpClientTest/WebRoot/WEB-INF/classes"/>
     </wb-module>

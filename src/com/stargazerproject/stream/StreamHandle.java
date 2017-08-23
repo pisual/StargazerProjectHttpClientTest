@@ -1,4 +1,4 @@
-package com.stargazerproject.net;
+package com.stargazerproject.stream;
 
 import java.util.Collection;
 import java.util.stream.Stream;
