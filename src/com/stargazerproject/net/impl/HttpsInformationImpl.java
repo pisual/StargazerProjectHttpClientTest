@@ -14,6 +14,8 @@ import java.security.cert.CertificateException;
 import javax.net.ssl.SSLContext;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
@@ -24,48 +26,34 @@ import org.apache.http.util.EntityUtils;
 
 import com.google.common.base.Optional;
 import com.stargazerproject.net.HttpsInformation;
+import com.stargazerproject.net.exception.HttpClientException;
+import com.stargazerproject.net.exception.HttpEntityException;
 
 public class HttpsInformationImpl implements HttpsInformation{
 	
 	private String keystrorefilePath;
 	private String keystrorepassword;
 	
-	public HttpsInformationImpl() {
-	}
+	public HttpsInformationImpl() {}
 	
 	@Override
 	public Optional<StringBuffer> httpSContent(Optional<String> url) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Optional<StringBuffer> httpSContent(Optional<String> url, KeystroreModel keystroreModel) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, KeyManagementException, UnrecoverableKeyException, IOException {
-		StringBuffer result = new StringBuffer();
-		CloseableHttpClient httpClient = httpClientBuild();
-		if (httpClient != null) {
-			HttpGet httpGet = new HttpGet(url.get());
-			CloseableHttpResponse response = httpClient.execute(httpGet);
-			try {
-				HttpEntity entity = response.getEntity();
-				if (entity != null) {
-					result.append(EntityUtils.toString(entity));
-					EntityUtils.consume(entity);
-				}
-			} finally {
-				response.close();
-			}
-		}
-		
-		return Optional.of(result);
+	public Optional<StringBuffer> httpSContent(Optional<String> url, KeystroreModel keystroreModel) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, KeyManagementException, UnrecoverableKeyException, HttpClientException, HttpEntityException, IOException {
+		CloseableHttpResponse closeableHttpResponse = closeableHttpResponseBuild(closeableHttpClient(), new HttpGet(url.get()));
+		HttpEntity entity = httpEntity(closeableHttpResponse);
+		return httpPageContent(entity);
 	}
 	
-	public FileInputStream keyStoreFileInputStream(String filePath) throws FileNotFoundException{
+	private FileInputStream keyStoreFileInputStream(String filePath) throws FileNotFoundException{
 		FileInputStream fileInputStream = new FileInputStream(new File(filePath));
 		return fileInputStream;
 	}
 	
-	public KeyStore keyStoreLoad() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException{
+	private KeyStore keyStoreLoad() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException{
 		KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
 		keyStore.load(keyStoreFileInputStream(keystrorefilePath), keystrorepassword.toCharArray());
 		return keyStore;
@@ -81,9 +69,51 @@ public class HttpsInformationImpl implements HttpsInformation{
 		return sSLConnectionSocketFactory;
 	}
 	
-	private CloseableHttpClient httpClientBuild() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, KeyManagementException, UnrecoverableKeyException{
+	private CloseableHttpClient closeableHttpClient() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException, KeyManagementException, UnrecoverableKeyException, HttpClientException{
 		CloseableHttpClient closeableHttpClient = HttpClients.custom().setSSLSocketFactory(sSLConnectionSocketFactory()).build();
+		if(closeableHttpClient == null){
+			throw new HttpClientException("HttpClient Can't Read");
+		}
 		return closeableHttpClient;
+	}
+	
+	private CloseableHttpResponse closeableHttpResponseBuild(CloseableHttpClient closeableHttpClient, HttpGet httpGet) throws ClientProtocolException, IOException {
+		CloseableHttpResponse closeableHttpResponse = null;
+		try {
+			closeableHttpResponse = closeableHttpClient.execute(httpGet);
+			return closeableHttpResponse;
+			}
+		
+		catch (ClientProtocolException clientProtocolException) {
+			throw clientProtocolException;
+			} 
+		
+		catch (IOException iOException) {
+			throw iOException;
+		}
+		finally{
+			try {
+				closeableHttpResponse.close();
+			} 
+			catch (IOException iOException) {
+				throw iOException;
+			}
+		}
+	}
+	
+	private HttpEntity httpEntity(CloseableHttpResponse closeableHttpResponse) throws HttpEntityException{
+		HttpEntity entity = closeableHttpResponse.getEntity();
+		if(entity == null){
+			throw new HttpEntityException("HttpEntity Can't Read");
+		}
+		return entity;
+	}
+	
+	private Optional<StringBuffer> httpPageContent(HttpEntity entity) throws ParseException, IOException{
+		StringBuffer result = new StringBuffer();
+		result.append(EntityUtils.toString(entity));
+		EntityUtils.consume(entity);
+		return Optional.of(result);
 	}
 	
 }
