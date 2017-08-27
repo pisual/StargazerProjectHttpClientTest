@@ -26,11 +26,11 @@ public class InstallCert {
   
     public static void main(String[] args) throws Exception {  
 		System.setProperty("javax.net.ssl.trustStore","/Users/Felixerio/SSL/hmog.me.keystore");
-        String host = "hmog.me";  
+        String host = "llss.me";  
         int port = 443;
         char[] passphrase = "1074adce".toCharArray();  
   
-        File file = new File("/Users/Felixerio/SSL/"+ host +".keystore");
+        File file = new File("/Users/Felixerio/SSL/hmog.me.keystore");
         if(file.exists()!=Boolean.TRUE){
             file.createNewFile();
         }
